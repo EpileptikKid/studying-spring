@@ -1,16 +1,31 @@
 package com.example.differentscopes;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
 @Component
 @RequestScope
 public class LoginProcessor {
+
+    private final LoggedUserManagementService loggedUserManagementService;
     private String username;
     private String password;
 
+    @Autowired
+    public LoginProcessor(LoggedUserManagementService loggedUserManagementService) {
+        System.out.println("create " + loggedUserManagementService);
+        this.loggedUserManagementService = loggedUserManagementService;
+    }
+
+
     public boolean login() {
-        return "Andrii".equals(username) && "password".equals(password);
+        if ("Andrii".equals(username) && "password".equals(password)) {
+            loggedUserManagementService.setUsername(username);
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public String getUsername() {
