@@ -9,17 +9,20 @@ import org.springframework.web.context.annotation.RequestScope;
 public class LoginProcessor {
 
     private final LoggedUserManagementService loggedUserManagementService;
+    private final LoginCountService loginCountService;
     private String username;
     private String password;
 
     @Autowired
-    public LoginProcessor(LoggedUserManagementService loggedUserManagementService) {
-        System.out.println("create " + loggedUserManagementService);
+    public LoginProcessor(LoggedUserManagementService loggedUserManagementService,
+                          LoginCountService loginCountService) {
+        this.loginCountService = loginCountService;
         this.loggedUserManagementService = loggedUserManagementService;
     }
 
 
     public boolean login() {
+        loginCountService.increment();
         if ("Andrii".equals(username) && "password".equals(password)) {
             loggedUserManagementService.setUsername(username);
             return true;
